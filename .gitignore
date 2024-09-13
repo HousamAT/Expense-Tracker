@@ -2,5 +2,3 @@
 /backend/keys.py
 backend/__pycache__/
 
-#frontend
-/frontend/node_modules
