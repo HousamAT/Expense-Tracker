@@ -18,7 +18,7 @@ except Exception as e:
 
  
 # Select database and collection
-db = client['Auth-React-Flask-App']
+db = client['Flask-APP']
 collection = db['Auth']
 
 # # Insert a new user document

@@ -1,0 +1,73 @@
+/* General container styling */
+div {
+  display: block;
+  max-width: 600px;
+  margin: 50px auto; /* Centers the form horizontally */
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading style */
+h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Input field styles */
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 18px;
+  box-sizing: border-box;
+  transition: border 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+/* Button styles */
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Paragraph and secondary button styling */
+p {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+}
+
+button:nth-of-type(2) {
+  background-color: #007BFF;
+  color: white;
+  margin-top: 10px;
+}
+
+button:nth-of-type(2):hover {
+  background-color: #0056b3;
+}
