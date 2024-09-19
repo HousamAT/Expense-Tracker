@@ -18,7 +18,7 @@ h2 {
 }
 
 /* Input field styles */
-input[type="email"],
+input[type="username"],
 input[type="password"] {
   width: 100%;
   padding: 12px;
@@ -30,7 +30,7 @@ input[type="password"] {
   transition: border 0.3s ease;
 }
 
-input[type="email"]:focus,
+input[type="name"]:focus,
 input[type="password"]:focus {
   border-color: #007BFF;
   outline: none;

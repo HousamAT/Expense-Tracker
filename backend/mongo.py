@@ -27,7 +27,6 @@ collection = db['Auth']
 #     "user_password": "mypassword",
 #     "user_id": 1
 # }
-
 # collection.insert_one(user_data)
 
 

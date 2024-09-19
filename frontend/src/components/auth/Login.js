@@ -7,7 +7,6 @@ import './Login.css';
 function Login() {
   const [formData, setFormData] = useState({
     username: '',
-    email: '',
     password: '',
   });
 
@@ -21,10 +20,10 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await authService.signup(formData);
-      alert('Sign up successful!');
+      await authService.signin(formData);
+      alert('Login successful!');
     } catch (error) {
-      alert('Sign up failed');
+      alert('Login failed');
     }
   };
   
@@ -35,11 +34,12 @@ function Login() {
     <h2>Sign In</h2>
     <form onSubmit={handleSubmit}>
       <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
+        type="username"
+        name="username"
+        placeholder="Email or User Name"
+        value={formData.username}
         onChange={handleChange}
+        required
       />
       <input
         type="password"
@@ -47,6 +47,7 @@ function Login() {
         placeholder="Password"
         value={formData.password}
         onChange={handleChange}
+        required
       />
       <button type="submit">Sign In</button>
     </form>

@@ -1,5 +1,6 @@
 // src/services/authService.js
-const API_URL = 'http://localhost:5000/api';
+
+const API_URL = 'http://localhost:5000/auth';
 
 async function signup(data) {
   const response = await fetch(`${API_URL}/signup`, {
