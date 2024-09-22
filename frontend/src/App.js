@@ -3,43 +3,18 @@ import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignUp from './components/auth/SignUp';
 import Login from './components/auth/Login';
+import HomePage from './components/HomePage/HomePage';
+
 function App() {
-  // const [data, setData] = useState([{}])
-  // useEffect(() => {
-  //   fetch("/members").then(
-  //     res => res.json()
-  //   ).then(
-  //     data => {
-  //       setData(data);
-  //       console.log(data);
-  //     }
-  //   )
-  // }, [])
-
-  // return (
-  //   <div>
-  //     {(typeof data.members === 'undefined') ? (
-  //       <p>Loading ...</p>
-  //     ) : (
-  //       data.members.map((member, i) => (
-  //         <p key={i}> {member}</p>
-  //       ))
-
-  //     )}
-
-
-  //   </div>
-
-  // )
-
 
     return (
-      <Router>
-        <Routes>
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/" element={< Login/>} />
-        </Routes>
-      </Router>
+        <Router>
+          <Routes>
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/" element={< Login/>} />
+            <Route path = "/homepage" element = {<HomePage/>}/>
+          </Routes>
+        </Router>
     );
   }
 

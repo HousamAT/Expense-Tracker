@@ -1,0 +1,46 @@
+/* Box.css */
+.homepage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    width: 100%; /* Ensure that the container takes full width */
+}
+
+.second-row {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Standard box styling */
+.box {
+    width: 200px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: white;
+    font-size: 20px;
+    padding: 20px;
+}
+
+/* Larger box for "Income vs Expense" */
+.box.large {
+    width: 420px; /* Width equal to two standard boxes */
+}
+
+/* Icon styling */
+.icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
