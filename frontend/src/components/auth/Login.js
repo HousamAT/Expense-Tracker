@@ -30,7 +30,7 @@ function Login() {
   const navigate = useNavigate()
 
   return (
-    <div>
+    <div className='login-container'>
     <h2>Sign In</h2>
     <form onSubmit={handleSubmit}>
       <input
