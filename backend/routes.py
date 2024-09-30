@@ -26,26 +26,24 @@ auth = Blueprint('auth', __name__)
 def signup():
     data = request.get_json() 
 
-    # Extract the data (assumes username, email, password are required)
+    # Extract the data (assumes username, password are required)
     username = data.get('username')
-    email = data.get('email')
     password = data.get('password')
 
     # Basic validation
-    if not username or not email or not password:
+    if not username or not password:
         return jsonify({'error': 'Missing data'}), 400
 
     
     # Check if a user exists
-    user = collection.find_one({"email": email, "username": username})
+    user = collection.find_one({"username": username})
     if user:
-        return jsonify({'error': 'User email already exists'}), 400
+        return jsonify({'error': 'Username already exists'}), 400
     else:
         try: 
             # Insert a new user document
             user_data = {
                 "username": username,
-                "email": email,
                 "password": password,
             }
             collection.insert_one(user_data)
@@ -55,9 +53,7 @@ def signup():
         except:
             return jsonify({'error': 'Failed to add user to the database'}), 500
 
-#the way the signin function works is 
-#if the user will enter a username or an email and a password
-#check if the username exists if not check if the password exists
+
 @auth.route("/signin", methods = ["POST"])
 def signin():
     try: 
@@ -72,7 +68,6 @@ def signin():
         
        
         user = collection.find_one({"username": username})
-        userbyemail = collection.find_one({"email": username})
         if user:
             #check if the password is correct
             if user['password'] == password:
@@ -81,14 +76,6 @@ def signin():
                 return jsonify({'message': 'Login successful', 'username': username}), 201 
             else:
                return jsonify({'error': 'user not found please check your password or username'}), 401 
-        
-        elif userbyemail:
-            if userbyemail['password'] == password:
-                
-               
-                return jsonify({'message': 'Login successful', 'username': userbyemail['username']}), 201
-            else:
-                return jsonify({'error': 'user not found please check your password or username'}), 401
             
         #if user does not exist
         else:

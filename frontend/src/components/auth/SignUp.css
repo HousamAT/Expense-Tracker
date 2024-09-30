@@ -29,7 +29,6 @@
 
 /* Input field styling */
 .signup-form input[type="text"],
-.signup-form input[type="email"],
 .signup-form input[type="password"] {
   width: 100%;
   padding: 12px;
@@ -42,7 +41,6 @@
 }
 
 .signup-form input[type="text"]:focus,
-.signup-form input[type="email"]:focus,
 .signup-form input[type="password"]:focus {
   border-color: #007BFF;
   outline: none;

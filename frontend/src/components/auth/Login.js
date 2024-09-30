@@ -41,7 +41,7 @@ function Login() {
       <input
         type="username"
         name="username"
-        placeholder="Email or User Name"
+        placeholder="User Name"
         value={formData.username}
         onChange={handleChange}
         required
