@@ -22,11 +22,14 @@ async function signin(data) {
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: 'include', 
     body: JSON.stringify(data),
   });
+  
   if (!response.ok) {
     throw new Error('Failed to sign in');
   }
+
   return response.json();
 }
 

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../context/GlobalState';
 
 export const AddTransaction = () => {
@@ -24,18 +24,34 @@ export const AddTransaction = () => {
       <h3>Add new transaction</h3>
       <form onSubmit={onSubmit}>
         <div className="form-control">
-          <label htmlFor="text">Text</label>
-          <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter text..." />
+          <label htmlFor="text">Category</label>
+          <input
+            list="categories"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Enter or select a category"
+          />
+          <datalist id="categories">
+            <option value="Groceries" />
+            <option value="Rent" />
+            <option value="Entertainment" />
+            <option value="Salary" />
+          </datalist>
         </div>
         <div className="form-control">
-          <label htmlFor="amount"
-            >Amount <br />
-            (negative - expense, positive - income)</label
-          >
-          <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount..." />
+          <label htmlFor="amount">
+            Amount <br />
+            (negative - expense, positive - income)
+          </label>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="Enter amount..."
+          />
         </div>
         <button className="btn">Add transaction</button>
       </form>
     </>
-  )
+  );
 }

@@ -24,8 +24,8 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100vw; /* Full screen width */
-  height: 100vh; /* Full screen height */
+  width: 100vw;
+  height: 100vh;
   padding: 20px;
   box-shadow: none;
 }
@@ -48,18 +48,18 @@ h3 {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 400px; /* Adjust max width */
+  max-width: 400px;
   padding: 20px;
   margin: 20px 0;
-  background-color: transparent; /* Remove white background */
-  box-shadow: none; /* Remove any shadow effect */
+  background-color: transparent;
+  box-shadow: none;
 }
 
 .inc-exp-container > div {
   flex: 1;
   text-align: center;
   padding: 10px;
-  border: none; /* Remove borders */
+  border: none;
 }
 
 .inc-exp-container > div:first-of-type {
@@ -79,20 +79,31 @@ h3 {
   color: #c0392b;
 }
 
-
 label {
   display: inline-block;
   margin-bottom: 10px;
 }
 
+/* Consolidated input styling for text, number, and list inputs */
 input[type='text'],
-input[type='number'] {
+input[type='number'],
+input[list] {
   border: 1px solid #dedede;
   border-radius: 4px;
   font-size: 16px;
   padding: 12px;
   width: 100%;
   margin-bottom: 20px;
+  appearance: none; /* Remove default dropdown arrow in some browsers */
+}
+
+input[list]::-webkit-calendar-picker-indicator {
+  display: none; /* Hide dropdown icon in webkit browsers */
+}
+
+/* Ensure dropdown list has the same width as input */
+datalist {
+  max-width: 100%;
 }
 
 .btn {
@@ -114,12 +125,12 @@ input[type='number'] {
 .list {
   list-style-type: none;
   width: 100%;
-  max-width: 400px; /* Adjust max width */
+  max-width: 400px;
   margin-bottom: 40px;
 }
 
 .list li {
-  background-color: transparent; /* Remove white background */
+  background-color: transparent;
   box-shadow: var(--box-shadow);
   color: #333;
   display: flex;
@@ -155,3 +166,6 @@ input[type='number'] {
 .list li:hover .delete-btn {
   opacity: 1;
 }
+
+
+

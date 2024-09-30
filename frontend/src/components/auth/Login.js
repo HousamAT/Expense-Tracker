@@ -20,8 +20,13 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await authService.signin(formData);
+      
+      const response = await authService.signin(formData);
+      
+      localStorage.setItem('username', response.username); // Store username in localStorage
+
       alert('Login successful!');
+      navigate('/dashboard')
     } catch (error) {
       alert('Login failed');
     }

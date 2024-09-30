@@ -21,6 +21,9 @@ except Exception as e:
 db = client['Flask-APP']
 collection = db['Auth']
 
+transaction_collection = db['TransactionList']
+
+
 # # Insert a new user document
 # user_data = {
 #     "user_name": "testuser",
@@ -56,3 +59,35 @@ collection = db['Auth']
 #     print("User deleted successfully.")
 # else:
 #     print("User not found.")
+
+
+#this is how changing the global varible 
+#I will use it when assigning user ID's
+
+document = {
+    "username": "User1",
+    "transactions": [
+        {
+            "id": 1,
+            "text": "Grocery shopping",
+            "amount": 50.75
+        },
+        {
+            "id": 2,
+            "text": "Subscription service",
+            "amount": 9.99
+        },
+        {
+            "id": 3,
+            "text": "Gym membership",
+            "amount": 30.00
+        }
+    ]
+}
+
+result = transaction_collection.insert_one(document)#to insert a list of transctions
+
+user_transactions = transaction_collection.find_one({"username": 'User1'}) #to get a list of user transactions
+
+for transaction in user_transactions['transactions']:
+    print(f"ID: {transaction['id']}, Text: {transaction['text']}, Amount: {transaction['amount']}") #to print or access after you get
