@@ -95,6 +95,8 @@ def get_transactions():
     
     username = request.args.get('username')  # Get the username from query params
     
+    print("here is the user name", username)
+    
     if not username:
         return jsonify({'error': 'Username not provided'}), 400
     
@@ -113,14 +115,35 @@ def get_transactions():
         return jsonify([]), 404  # Return 404 status if user not found
 
 
-@auth.route('/transactions', methods=['POST'])
+@auth.route('/addtransactions', methods=['POST'])
 def add_transaction():
+    username = request.args.get('username')  # Get the username from query params
+    
+    if not username:
+        return jsonify({'error': 'Username not provided'}), 400
+    
+    # Retrieve the user's transactions from the collection
+    user_transactions = transaction_collection.find_one({'username': username})
+    
+    if not user_transactions:
+        return jsonify({'error': 'User not found'}), 404
+    
+    # Parse the new transaction data from the request body
     data = request.get_json()
     new_transaction = {
+        'id': data['id'],  # Ensure the transaction has an 'id'
         'text': data['text'],
         'amount': data['amount']
     }
-    transaction_collection.insert_one(new_transaction)
+    
+    
+    # Update the user's transaction list by appending the new transaction
+    transaction_collection.update_one(
+        {'username': username}, 
+        {'$push': {'transactions': new_transaction}}
+    )
+    
     return jsonify(new_transaction), 201
+
     
        

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import authService from '../../services/authService';
+import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 
 function SignUp() {
@@ -18,12 +19,18 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await authService.signup(formData);
+      const response = await authService.signup(formData);
+      localStorage.removeItem('username'); // Clears old  'username' key from localStorage
+      localStorage.setItem('username', response.username); // Store new username in local Storage
+
       alert('Sign up successful!');
+      navigate('/dashboard')
     } catch (error) {
       alert('Sign up failed');
     }
   };
+
+  const navigate = useNavigate()
 
   return (
     <div className="signup-container">

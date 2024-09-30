@@ -4,20 +4,41 @@ import { GlobalContext } from '../context/GlobalState';
 export const AddTransaction = () => {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
-
   const { addTransaction } = useContext(GlobalContext);
 
-  const onSubmit = e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const newTransaction = {
       id: Math.floor(Math.random() * 100000000),
       text,
       amount: +amount
-    }
+    };
 
-    addTransaction(newTransaction);
-  }
+    try {
+      const username = localStorage.getItem('username');
+      // Replace 'your-backend-url' with the actual backend URL
+      const response = await fetch(`http://localhost:5000/auth/addtransactions?username=${username}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTransaction),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Assuming the GlobalContext is used to update your frontend
+        addTransaction(data);
+        window.location.reload(); 
+      } else {
+        console.error('Failed to add transaction:', data.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <>

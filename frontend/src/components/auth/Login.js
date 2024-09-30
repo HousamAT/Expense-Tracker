@@ -21,12 +21,13 @@ function Login() {
     e.preventDefault();
     try {
       
-      const response = await authService.signin(formData);
+      const response = await authService.signin(formData);  
+      localStorage.removeItem('username'); // Clears old  'username' key from localStorage
+      localStorage.setItem('username', response.username); // Store new username in local Storage
       
-      localStorage.setItem('username', response.username); // Store username in localStorage
-
       alert('Login successful!');
       navigate('/dashboard')
+
     } catch (error) {
       alert('Login failed');
     }
