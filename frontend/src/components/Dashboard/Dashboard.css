@@ -240,3 +240,53 @@ select:after {
 }
 
 
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  border: 1px solid #ccc; /* Border around the dropdown */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #fff; /* Background color */
+  cursor: pointer;
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+
+.dropdown-header {
+  padding: 10px; /* Padding inside the dropdown */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-header:hover {
+  background-color: #f1f1f1; /* Light gray on hover */
+}
+
+.dropdown-list {
+  position: absolute;
+  top: 100%; /* Position below the header */
+  left: 0;
+  right: 0;
+  background-color: white; /* Background for the dropdown options */
+  border: 1px solid #ccc; /* Border around the dropdown list */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  z-index: 1000; /* Ensure dropdown appears above other content */
+
+  max-height: 200px; /* This limits the height to roughly 6 items */
+  overflow-y: auto; /* Enable vertical scrolling if there are more than 6 items */
+}
+
+.dropdown-item {
+  padding: 10px; /* Padding for each item */
+  display: flex;
+  align-items: center; /* Align icon and text */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1; /* Highlight on hover */
+}
+
+

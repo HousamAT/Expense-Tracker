@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-const Transaction = ({ text, amount }) => (
-  <li className={amount < 0 ? 'minus' : 'plus'}>
-    {text} <span>{amount < 0 ? '-' : '+'}${Math.abs(amount).toFixed(2)}</span>
-  </li>
-);
 
 const TransactionsOverview = () => {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // Track loading state
-  const [error, setError] = useState(null); // Track error state
+  const [error, setError] = useState(null); 
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -18,7 +13,7 @@ const TransactionsOverview = () => {
       const username = localStorage.getItem('username');
       if (!username) {
         console.error('No username found in localStorage');
-        setError('Username not found'); // Set error message
+        setError('Username not found'); 
         return;
       }
 
@@ -37,7 +32,7 @@ const TransactionsOverview = () => {
         setTransactions(data);
       } catch (error) {
         console.error('Error fetching transactions:', error);
-        setError(error.message); // Set error message from the exception
+        setError(error.message); 
       } finally {
         setIsLoading(false); // Always clear loading state
       }
@@ -53,7 +48,7 @@ const TransactionsOverview = () => {
 
   const calculateIncome = () => transactions.filter(t => t.amount > 0).reduce((acc, t) => acc + t.amount, 0).toFixed(2);
 
-  const calculateExpense = () => transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount * -1, 0).toFixed(2); // Corrected calculation
+  const calculateExpense = () => transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount * -1, 0).toFixed(2); 
 
   const renderContent = () => {
     if (isLoading) {
@@ -82,7 +77,7 @@ const TransactionsOverview = () => {
 
 export default TransactionsOverview;
 
-// Separate Balance component (optional)
+// Separate Balance component 
 const Balance = ({ total }) => (
   <>
     <h4>Your Balance</h4>
@@ -90,7 +85,7 @@ const Balance = ({ total }) => (
   </>
 );
 
-// Separate IncomeExpenses component (optional)
+// Separate IncomeExpenses component
 const IncomeExpenses = ({ income, expense }) => (
   <div className="inc-exp-container">
     <div>
@@ -104,14 +99,54 @@ const IncomeExpenses = ({ income, expense }) => (
   </div>
 );
 
-// Separate TransactionList component (optional)
+
+// Define categories with FontAwesome icons
+const categories = [
+  { value: 'Groceries', label: 'Groceries', icon: <i className="fas fa-shopping-basket"></i> },
+  { value: 'Takeaway', label: 'Takeaway', icon: <i className="fas fa-utensils"></i> },
+  { value: 'Clothing', label: 'Clothing', icon: <i className="fas fa-tshirt"></i> },
+  { value: 'Books', label: 'Books', icon: <i className="fas fa-book"></i> },
+  { value: 'Rent', label: 'Rent', icon: <i className="fas fa-home"></i> },
+  { value: 'Car', label: 'Car', icon: <i className="fas fa-car"></i> },
+  { value: 'Dining Out', label: 'Dining Out', icon: <i className="fas fa-utensils"></i> },
+  { value: 'Travel', label: 'Travel', icon: <i className="fas fa-plane"></i> },
+  { value: 'Healthcare', label: 'Healthcare', icon: <i className="fas fa-hospital"></i> },
+  { value: 'Education', label: 'Education', icon: <i className="fas fa-university"></i> },
+  { value: 'Utilities', label: 'Utilities', icon: <i className="fas fa-lightbulb"></i> },
+  { value: 'Salary', label: 'Salary', icon: <i className="fas fa-money-bill-wave"></i> },
+  { value: 'Savings', label: 'Savings', icon: <i className="fas fa-piggy-bank"></i> },
+  { value: 'Business', label: 'Business', icon: <i className="fas fa-briefcase"></i> },
+];
+
+// Map text to corresponding icon based on categories
+const getIconForTransaction = (text) => {
+  const category = categories.find((cat) => cat.value === text);
+  return category ? category.icon : <i className="fas fa-question"></i>; // Default icon if no match
+};
+
+// TransactionList component
 const TransactionList = ({ transactions }) => (
   <>
     <h3>History</h3>
     <ul className="list">
-      {transactions.map(transaction => (
-        <Transaction key={transaction.id} text={transaction.text} amount={transaction.amount} />
+      {transactions.map((transaction) => (
+        <Transaction
+          key={transaction.id}
+          text={transaction.text}
+          amount={transaction.amount}
+        />
       ))}
     </ul>
   </>
 );
+
+// Transaction component
+const Transaction = ({ text, amount }) => {
+  return (
+    <li className={amount < 0 ? 'minus' : 'plus'}>
+      {getIconForTransaction(text)} {/* Get the icon based on the transaction text */}
+      {text} <span>{amount < 0 ? '-' : '+'}${Math.abs(amount)}</span>
+    </li>
+  );
+};
+
