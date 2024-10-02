@@ -124,29 +124,72 @@ const getIconForTransaction = (text) => {
   return category ? category.icon : <i className="fas fa-question"></i>; // Default icon if no match
 };
 
-// TransactionList component
-const TransactionList = ({ transactions }) => (
-  <>
-    <h3>History</h3>
-    <ul className="list">
-      {transactions.map((transaction) => (
-        <Transaction
-          key={transaction.id}
-          text={transaction.text}
-          amount={transaction.amount}
-        />
-      ))}
-    </ul>
-  </>
-);
+
+
+const TransactionList = ({ transactions }) => {
+  const handleDeleteTransaction = async (transactionId) => {
+    const username = localStorage.getItem('username'); // Replace with the actual username from your app's state
+
+    try {
+      const response = await fetch(`http://localhost:5000/auth/deletetransaction?username=${username}&id=${transactionId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete transaction');
+      }
+
+      const data = await response.json();
+      window.location.reload();
+      console.log(data.message); // Successfully deleted message
+
+      // Update the local state to remove the deleted transaction from the UI
+      // Example: setTransactions(prev => prev.filter(transaction => transaction.id !== transactionId));
+
+    } catch (error) {
+      console.error('Error deleting transaction:', error.message);
+      // Optionally, display error message to the user
+    }
+  };
+
+  return (
+    <>
+      <h3>History</h3>
+      <ul className="list">
+        {transactions.map(transaction => (
+          <Transaction 
+            key={transaction.id} 
+            text={transaction.text} 
+            amount={transaction.amount} 
+            onDelete={() => handleDeleteTransaction(transaction.id)} // Pass delete function
+          />
+        ))}
+      </ul>
+    </>
+  );
+};
+
 
 // Transaction component
-const Transaction = ({ text, amount }) => {
+const Transaction = ({ text, amount, onDelete }) => {
   return (
     <li className={amount < 0 ? 'minus' : 'plus'}>
       {getIconForTransaction(text)} {/* Get the icon based on the transaction text */}
       {text} <span>{amount < 0 ? '-' : '+'}${Math.abs(amount)}</span>
+
+      {/* Icons for edit and delete (visible on hover) */}
+      <div className="transaction-options">
+        <i className="fas fa-edit"></i> {/* Edit Icon */}
+        <i 
+          className="fas fa-trash-alt" 
+          onClick={onDelete} // Call the delete function on click
+          style={{ cursor: 'pointer' }} // Change cursor to pointer for better UX
+        ></i> {/* Delete Icon */}
+      </div>
     </li>
   );
 };
-

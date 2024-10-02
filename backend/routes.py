@@ -145,5 +145,32 @@ def add_transaction():
     
     return jsonify(new_transaction), 201
 
+
+@auth.route('/deletetransaction', methods=['DELETE'])
+def delete_transaction():
+    username = request.args.get('username')  
+    transaction_id = request.args.get('id')  
+
+    if not username or not transaction_id:
+        return jsonify({'error': 'Username or transaction ID not provided'}), 400
+
+    # Convert transaction_id to integer
+    try:
+        transaction_id = int(transaction_id)  # Ensure it is an integer
+    except ValueError:
+        return jsonify({'error': 'Invalid transaction ID format'}), 400
+
+    result = transaction_collection.update_one(
+        {'username': username},
+        {'$pull': {'transactions': {'id': transaction_id}}}
+    )
+
+    if result.modified_count == 0:
+        return jsonify({'error': 'Transaction not found or not deleted'}), 404
+
+    return jsonify({'message': 'Transaction deleted successfully'}), 200
+
+
+
     
        
