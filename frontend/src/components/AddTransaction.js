@@ -44,21 +44,21 @@ export const AddTransaction = () => {
     <>
       <h3>Add new transaction</h3>
       <form onSubmit={onSubmit}>
-        <div className="form-control">
-          <label htmlFor="text">Category</label>
-          <input
-            list="categories"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Enter or select a category"
-          />
-          <datalist id="categories">
-            <option value="Groceries" />
-            <option value="Rent" />
-            <option value="Entertainment" />
-            <option value="Salary" />
-          </datalist>
-        </div>
+      <div className="form-control">
+      <label htmlFor="category">Category</label>
+        <select
+          id="category"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        >
+          <option value="" disabled>Select a category</option>
+          <option value="Groceries">Groceries</option>
+          <option value="Rent">Rent</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Salary">Salary</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
         <div className="form-control">
           <label htmlFor="amount">
             Amount <br />

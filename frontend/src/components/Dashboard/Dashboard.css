@@ -1,171 +1,242 @@
+/* Import Lato font for a clean and modern look */
 @import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
 
+/* Global styles */
 :root {
   --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --primary-color: #2ecc71; /* Vibrant green for positive values */
+  --secondary-color: #c0392b; /* Soft red for negative values */
+  --background-color: #f5f5f5; /* Light gray background */
+  --text-color: #333; /* Dark gray for main text */
+  --accent-color: #9c88ff; /* Purple accent for buttons */
+  --border-color: #ddd; /* Border color for sections */
+  --font-size: 16px; /* Base font size */
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Lato', sans-serif;
+  font-size: var(--font-size);
 }
 
 body {
-  background-color: transparent;
-  font-family: 'Lato', sans-serif;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--background-color);
+  padding: 0 20px;
 }
 
-.container {
+/* Dashboard container */
+.dashboard-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1400px; /* Increase max width */
+  height: 85vh; /* Occupy larger portion of the screen */
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  background-color: #fff;
+  position: relative;
+}
+
+/* Overview section */
+.overview-section {
+  flex: 1;
+  padding: 20px;
+  margin-right: 20px;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  height: 100%; /* Ensure it takes the full height of the container */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  padding: 20px;
-  box-shadow: none;
+  justify-content: space-between;
+  overflow: hidden; /* Prevent overflow of growing content */
 }
 
+/* Transaction section */
+.transaction-section {
+  flex: 1;
+  min-width: 300px;
+  padding: 20px;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  height: 100%; /* Ensure it takes the full height of the container */
+  overflow-y: auto; /* Allow scrolling if transaction list grows */
+}
+
+/* General container style */
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Headings */
 h1, h3 {
   margin-bottom: 20px;
   text-align: center;
+  color: var(--text-color);
 }
 
-h1 {
-  letter-spacing: 1px;
-}
-
-h3 {
-  padding-bottom: 10px;
-  border-bottom: 1px solid #bbb;
-}
-
+/* Income/Expense container */
 .inc-exp-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
-  max-width: 400px;
   padding: 20px;
   margin: 20px 0;
-  background-color: transparent;
-  box-shadow: none;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  background-color: #fff;
 }
 
 .inc-exp-container > div {
   flex: 1;
   text-align: center;
-  padding: 10px;
-  border: none;
 }
 
-.inc-exp-container > div:first-of-type {
-  border-right: 1px solid #dedede;
-}
-
-.money {
-  font-size: 20px;
-  letter-spacing: 1px;
-}
-
+/* Money display */
 .money.plus {
-  color: #2ecc71;
+  color: var(--primary-color);
 }
 
 .money.minus {
-  color: #c0392b;
+  color: var(--secondary-color);
 }
 
-label {
-  display: inline-block;
-  margin-bottom: 10px;
-}
-
-/* Consolidated input styling for text, number, and list inputs */
-input[type='text'],
-input[type='number'],
-input[list] {
-  border: 1px solid #dedede;
+/* Input styles */
+input[type='text'], input[type='number'], input[list] {
+  border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: var(--font-size);
   padding: 12px;
   width: 100%;
   margin-bottom: 20px;
-  appearance: none; /* Remove default dropdown arrow in some browsers */
+  background-color: #fff;
 }
 
-input[list]::-webkit-calendar-picker-indicator {
-  display: none; /* Hide dropdown icon in webkit browsers */
-}
-
-/* Ensure dropdown list has the same width as input */
-datalist {
-  max-width: 100%;
-}
-
+/* Button styles */
 .btn {
   cursor: pointer;
-  background-color: #9c88ff;
-  box-shadow: var(--box-shadow);
+  background-color: var(--accent-color);
   color: #fff;
   border: none;
   padding: 12px;
   width: 100%;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  font-size: var(--font-size);
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  transition: background-color 0.2s ease-in-out;
 }
 
 .btn:hover {
-  background-color: #7a68d3;
+  background-color: #6e63d8; /* Darken the accent color on hover */
 }
 
+/* List styles */
 .list {
   list-style-type: none;
   width: 100%;
-  max-width: 400px;
   margin-bottom: 40px;
+  max-height: 300px; /* Set max height for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-right: 10px; /* Add padding to avoid scrollbar overlap */
 }
 
 .list li {
   background-color: transparent;
   box-shadow: var(--box-shadow);
-  color: #333;
+  color: var(--text-color);
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 15px;
   margin: 10px 0;
 }
 
-.list li.plus {
-  border-right: 5px solid #2ecc71;
+/* Scrollbar customization */
+.list::-webkit-scrollbar {
+  width: 8px;
 }
 
-.list li.minus {
-  border-right: 5px solid #c0392b;
+.list::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 4px;
 }
 
+.list::-webkit-scrollbar-thumb:hover {
+  background-color: #6e63d8; /* Darken on hover */
+}
+
+/* Delete button */
 .delete-btn {
   cursor: pointer;
   background-color: #e74c3c;
   border: none;
   color: white;
-  font-size: 16px;
-  line-height: 16px;
+  font-size: var(--font-size);
   padding: 5px;
+}
+
+
+
+/* Style for the dropdown (select) */
+select {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: var(--font-size);
+  padding: 12px;
+  width: 100%;
+  background-color: #fff;
+  color: var(--text-color);
+  appearance: none; /* Hide default arrow for better customization */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23999" d="M2 0L0 2h4z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px;
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+}
+
+/* Style for the dropdown options */
+select option {
+  background-color: #fff;
+  color: var(--text-color);
+  font-size: var(--font-size);
+}
+
+/* Optional: Hover effect on the select dropdown */
+select:hover {
+  border-color: var(--accent-color); /* Highlight border when hovered */
+}
+
+/* Optional: Focused state for dropdown */
+select:focus {
+  outline: none; /* Remove default focus outline */
+  border-color: var(--accent-color); /* Add custom border on focus */
+}
+
+/* Align dropdown arrow with text */
+select:after {
+  content: '▼';
+  font-size: 12px;
+  color: #333;
   position: absolute;
+  right: 10px;
   top: 50%;
-  left: -30px;
   transform: translateY(-50%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
-
-.list li:hover .delete-btn {
-  opacity: 1;
-}
-
 
 
