@@ -332,3 +332,15 @@ select:after {
 .transaction-options i:hover {
   color: #333;
 }
+
+label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #333; /* Dark gray for readability */
+  line-height: 1.5;
+}
+
+label strong {
+  font-weight: 600; /* Makes the expense and income text bolder */
+}
+

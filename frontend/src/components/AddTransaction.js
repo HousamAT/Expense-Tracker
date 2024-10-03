@@ -1,9 +1,11 @@
+
 import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../context/GlobalState';
 
 export const AddTransaction = () => {
   const [category, setCategory] = useState(null);
   const [amount, setAmount] = useState(0);
+  const [transactionType, setTransactionType] = useState('expense'); // State to determine if it's an expense or income
   const { addTransaction } = useContext(GlobalContext);
 
   const onSubmit = async (e) => {
@@ -11,8 +13,8 @@ export const AddTransaction = () => {
 
     const newTransaction = {
       id: Math.floor(Math.random() * 100000000),
-      text: category ? category.label : '', 
-      amount: +amount, 
+      text: category ? category.label : '',
+      amount: transactionType === 'expense' ? -Math.abs(amount) : Math.abs(amount), // Set amount based on transactionType
     };
 
     try {
@@ -60,7 +62,7 @@ export const AddTransaction = () => {
 
   const handleSelect = (selectedCategory) => {
     setCategory(selectedCategory);
-    setDropdownOpen(false); // Close dropdown after selection
+    setDropdownOpen(false);
   };
 
   return (
@@ -100,8 +102,9 @@ export const AddTransaction = () => {
 
         <div className="form-control">
           <label htmlFor="amount">
-            Amount <br />
-            (negative - expense, positive - income)
+            <strong>Amount</strong> <br />
+            
+            <span>Add a Transaction Amount </span> Below
           </label>
           <input
             type="number"
@@ -109,6 +112,28 @@ export const AddTransaction = () => {
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Enter amount..."
           />
+        </div>
+
+        <div className="form-control">
+          <label>Transaction Type:</label><br />
+          <input
+            type="radio"
+            id="expense"
+            name="transactionType"
+            value="expense"
+            checked={transactionType === 'expense'}
+            onChange={() => setTransactionType('expense')}
+          />
+          <label htmlFor="expense">Expense</label><br />
+          <input
+            type="radio"
+            id="income"
+            name="transactionType"
+            value="income"
+            checked={transactionType === 'income'}
+            onChange={() => setTransactionType('income')}
+          />
+          <label htmlFor="income">Income</label>
         </div>
 
         <button className="btn">Add transaction</button>
