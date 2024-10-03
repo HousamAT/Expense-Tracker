@@ -34,7 +34,6 @@ def signup():
     if not username or not password:
         return jsonify({'error': 'Missing data'}), 400
 
-    
     # Check if a user exists
     user = collection.find_one({"username": username})
     if user:
@@ -45,13 +44,46 @@ def signup():
             user_data = {
                 "username": username,
                 "password": password,
+                "transactions": []  # Initialize an empty array for transactions
             }
             collection.insert_one(user_data)
+
+            # Insert a dummy transactions
+            dummy_transaction_1 = {
+                'id': 1,  
+                'text': "Travel",  
+                'amount': -1000       
+            }
             
+            dummy_transaction_2 = {
+                'id': 2,  
+                'text': "Groceries",  
+                'amount': -300       
+            }
             
+            dummy_transaction_3 = {
+                'id': 3,  
+                'text': "Books",  
+                'amount': -150       
+            }
+            
+            dummy_transaction_4 = {
+                'id': 4,  
+                'text': "Salary",  
+                'amount': 1500       
+            }
+
+            # Insert the dummy transaction into the transaction collection
+            transaction_collection.insert_one({
+                'username': username,
+                'transactions': [dummy_transaction_1, dummy_transaction_2, dummy_transaction_3, dummy_transaction_4]  
+            })
+
             return jsonify({'message': 'User created successfully', 'username': username}), 201 
-        except:
-            return jsonify({'error': 'Failed to add user to the database'}), 500
+        except Exception as e:
+            return jsonify({'error': 'Failed to add user to the database', 'details': str(e)}), 500
+
+
 
 
 @auth.route("/signin", methods = ["POST"])
