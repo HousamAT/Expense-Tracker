@@ -77,6 +77,7 @@ const TransactionsOverview = () => {
         transaction.id === updatedTransaction.id ? updatedTransaction : transaction
       ));
       console.log(data.message); // Successfully updated message
+      window.location.reload();
 
     } catch (error) {
       console.error('Error updating transaction:', error.message);
