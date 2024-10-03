@@ -170,6 +170,31 @@ def delete_transaction():
 
     return jsonify({'message': 'Transaction deleted successfully'}), 200
 
+@auth.route('/updatetransaction', methods=['PUT'])
+def update_transaction():
+    username = request.args.get('username')  
+    transaction_id = request.json.get('id') 
+    new_amount = request.json.get('amount')
+    new_category = request.json.get('text') 
+    
+        
+    # Convert transaction_id to integer
+    try:
+        transaction_id = int(transaction_id)  # Ensure it is an integer
+    except ValueError:
+        return jsonify({'error': 'Invalid transaction ID format'}), 400
+
+    # Update the transaction in the database
+    result = transaction_collection.update_one(
+        {'username': username, 'transactions.id': transaction_id},  
+        {'$set': {'transactions.$.amount': new_amount, 'transactions.$.text': new_category}} 
+    )
+
+    if result.modified_count == 0:
+        return jsonify({'error': 'Transaction not found or not updated'}), 404
+
+    return jsonify({'message': 'Transaction updated successfully'}), 200
+
 
 
     

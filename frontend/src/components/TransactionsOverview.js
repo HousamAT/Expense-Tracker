@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-
+import TransactionEditPopup from './TransactionEditPopup'; 
 
 const TransactionsOverview = () => {
   const [transactions, setTransactions] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null); 
 
+  // Fetch transactions on component mount
   useEffect(() => {
     const fetchTransactions = async () => {
-      setIsLoading(true); // Set loading state
-
+      setIsLoading(true);
       const username = localStorage.getItem('username');
+
       if (!username) {
         console.error('No username found in localStorage');
         setError('Username not found'); 
@@ -18,7 +19,6 @@ const TransactionsOverview = () => {
       }
 
       try {
-        console.log('I am getting called');
         const response = await fetch(`http://localhost:5000/auth/transactions?username=${username}`, {
           method: 'GET',
           credentials: 'include',
@@ -34,36 +34,66 @@ const TransactionsOverview = () => {
         console.error('Error fetching transactions:', error);
         setError(error.message); 
       } finally {
-        setIsLoading(false); // Always clear loading state
+        setIsLoading(false);
       }
     };
 
     fetchTransactions();
   }, []);
 
+  // Calculate total, income, and expense
   const calculateTotal = () => {
-    if (!transactions.length) return 0; // Handle empty transactions array
     return transactions.reduce((acc, transaction) => acc + transaction.amount, 0).toFixed(2);
   };
 
-  const calculateIncome = () => transactions.filter(t => t.amount > 0).reduce((acc, t) => acc + t.amount, 0).toFixed(2);
+  const calculateIncome = () => {
+    return transactions.filter(t => t.amount > 0).reduce((acc, t) => acc + t.amount, 0).toFixed(2);
+  };
 
-  const calculateExpense = () => transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount * -1, 0).toFixed(2); 
+  const calculateExpense = () => {
+    return transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount * -1, 0).toFixed(2); 
+  }; 
 
+  // Update a transaction
+  const handleUpdateTransaction = async (updatedTransaction) => {
+    const username = localStorage.getItem('username');
+
+    try {
+      const response = await fetch(`http://localhost:5000/auth/updatetransaction?username=${username}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTransaction),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update transaction');
+      }
+
+      const data = await response.json();
+      setTransactions(prev => prev.map(transaction => 
+        transaction.id === updatedTransaction.id ? updatedTransaction : transaction
+      ));
+      console.log(data.message); // Successfully updated message
+
+    } catch (error) {
+      console.error('Error updating transaction:', error.message);
+      // Optionally, display error message to the user
+    }
+  };
+
+  // Render loading state, error, or transaction overview
   const renderContent = () => {
-    if (isLoading) {
-      return <p>Loading...</p>;
-    }
-
-    if (error) {
-      return <p>Error: {error}</p>;
-    }
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
 
     return (
       <>
         <Balance total={calculateTotal()} />
         <IncomeExpenses income={calculateIncome()} expense={calculateExpense()} />
-        <TransactionList transactions={transactions} />
+        <TransactionList transactions={transactions} onUpdate={handleUpdateTransaction} />
       </>
     );
   };
@@ -77,7 +107,7 @@ const TransactionsOverview = () => {
 
 export default TransactionsOverview;
 
-// Separate Balance component 
+// Balance component to display the total balance
 const Balance = ({ total }) => (
   <>
     <h4>Your Balance</h4>
@@ -85,7 +115,7 @@ const Balance = ({ total }) => (
   </>
 );
 
-// Separate IncomeExpenses component
+// Income and expenses component
 const IncomeExpenses = ({ income, expense }) => (
   <div className="inc-exp-container">
     <div>
@@ -99,8 +129,7 @@ const IncomeExpenses = ({ income, expense }) => (
   </div>
 );
 
-
-// Define categories with FontAwesome icons
+// Transaction categories and icons
 const categories = [
   { value: 'Groceries', label: 'Groceries', icon: <i className="fas fa-shopping-basket"></i> },
   { value: 'Takeaway', label: 'Takeaway', icon: <i className="fas fa-utensils"></i> },
@@ -118,17 +147,16 @@ const categories = [
   { value: 'Business', label: 'Business', icon: <i className="fas fa-briefcase"></i> },
 ];
 
-// Map text to corresponding icon based on categories
+// Function to get the appropriate icon for a transaction
 const getIconForTransaction = (text) => {
   const category = categories.find((cat) => cat.value === text);
-  return category ? category.icon : <i className="fas fa-question"></i>; // Default icon if no match
+  return category ? category.icon : <i className="fas fa-question"></i>;
 };
 
-
-
-const TransactionList = ({ transactions }) => {
+// List of transactions
+const TransactionList = ({ transactions, onUpdate }) => {
   const handleDeleteTransaction = async (transactionId) => {
-    const username = localStorage.getItem('username'); // Replace with the actual username from your app's state
+    const username = localStorage.getItem('username');
 
     try {
       const response = await fetch(`http://localhost:5000/auth/deletetransaction?username=${username}&id=${transactionId}`, {
@@ -144,15 +172,10 @@ const TransactionList = ({ transactions }) => {
       }
 
       const data = await response.json();
-      window.location.reload();
-      console.log(data.message); // Successfully deleted message
-
-      // Update the local state to remove the deleted transaction from the UI
-      // Example: setTransactions(prev => prev.filter(transaction => transaction.id !== transactionId));
+      window.location.reload(); // Refresh page to update transaction list
 
     } catch (error) {
       console.error('Error deleting transaction:', error.message);
-      // Optionally, display error message to the user
     }
   };
 
@@ -163,9 +186,9 @@ const TransactionList = ({ transactions }) => {
         {transactions.map(transaction => (
           <Transaction 
             key={transaction.id} 
-            text={transaction.text} 
-            amount={transaction.amount} 
-            onDelete={() => handleDeleteTransaction(transaction.id)} // Pass delete function
+            transaction={transaction} 
+            onDelete={() => handleDeleteTransaction(transaction.id)} 
+            onUpdate={onUpdate}
           />
         ))}
       </ul>
@@ -173,23 +196,32 @@ const TransactionList = ({ transactions }) => {
   );
 };
 
+// Individual transaction component
+const Transaction = ({ transaction, onDelete, onUpdate }) => {
+  const [isEditing, setIsEditing] = useState(false);
 
-// Transaction component
-const Transaction = ({ text, amount, onDelete }) => {
+  const handleUpdate = (updatedTransaction) => {
+    onUpdate(updatedTransaction);
+    setIsEditing(false);
+  };
+
   return (
-    <li className={amount < 0 ? 'minus' : 'plus'}>
-      {getIconForTransaction(text)} {/* Get the icon based on the transaction text */}
-      {text} <span>{amount < 0 ? '-' : '+'}${Math.abs(amount)}</span>
+    <li className={transaction.amount < 0 ? 'minus' : 'plus'}>
+      {getIconForTransaction(transaction.text)}
+      {transaction.text} <span>{transaction.amount < 0 ? '-' : '+'}${Math.abs(transaction.amount)}</span>
 
-      {/* Icons for edit and delete (visible on hover) */}
       <div className="transaction-options">
-        <i className="fas fa-edit"></i> {/* Edit Icon */}
-        <i 
-          className="fas fa-trash-alt" 
-          onClick={onDelete} // Call the delete function on click
-          style={{ cursor: 'pointer' }} // Change cursor to pointer for better UX
-        ></i> {/* Delete Icon */}
+        <i className="fas fa-edit" onClick={() => setIsEditing(true)}></i> {/* Edit Icon */}
+        <i className="fas fa-trash-alt" onClick={onDelete}></i> {/* Delete Icon */}
       </div>
+
+      {isEditing && (
+        <TransactionEditPopup
+          transaction={transaction}
+          onClose={() => setIsEditing(false)}
+          onUpdate={handleUpdate}
+        />
+      )}
     </li>
   );
 };
