@@ -1,8 +1,51 @@
+// // src/services/authService.js
+
+// // export const API_URL = import.meta.env.MODE === 'development' ? 'http://127.0.0.1:5000/auth' : '/auth';
+// export const API_URL = '/auth';
+
+
+// async function signup(data) {
+//   const response = await fetch(`${API_URL}/signup`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(data),
+//   });
+//   if (!response.ok) {
+//     throw new Error('Failed to sign up');
+//   }
+//   return response.json();
+// }
+
+// async function signin(data) {
+//   console.log('Signing in');
+//   const response = await fetch(`${API_URL}/signin`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     credentials: 'include', 
+//     body: JSON.stringify(data),
+//   });
+  
+//   if (!response.ok) {
+//     throw new Error('Failed to sign in');
+//   }
+
+//   return response.json();
+// }
+
+// export default { signup, signin };
+
+
+
+// the updated authService to deal with deployment
+// //////////////////////////////////////////////////////////////////
 // src/services/authService.js
 
 // export const API_URL = import.meta.env.MODE === 'development' ? 'http://127.0.0.1:5000/auth' : '/auth';
 export const API_URL = '/auth';
-
 
 async function signup(data) {
   const response = await fetch(`${API_URL}/signup`, {
@@ -28,7 +71,7 @@ async function signin(data) {
     credentials: 'include', 
     body: JSON.stringify(data),
   });
-  
+
   if (!response.ok) {
     throw new Error('Failed to sign in');
   }
@@ -36,4 +79,12 @@ async function signin(data) {
   return response.json();
 }
 
-export default { signup, signin };
+// Create a named export for the functions
+const authService = {
+  signup,
+  signin,
+};
+
+// Export the authService object as the default export
+export default authService;
+

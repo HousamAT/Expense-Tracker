@@ -78,11 +78,10 @@ const TransactionsOverview = () => {
         throw new Error(errorData.error || 'Failed to update transaction');
       }
 
-      const data = await response.json();
+      await response.json();
       setTransactions(prev => prev.map(transaction =>
         transaction.id === updatedTransaction.id ? updatedTransaction : transaction
       ));
-      console.log(data.message);
       window.location.reload();
 
     } catch (error) {
@@ -177,7 +176,7 @@ const TransactionList = ({ transactions, onUpdate }) => {
         throw new Error(errorData.error || 'Failed to delete transaction');
       }
 
-      const data = await response.json();
+      await response.json();
       window.location.reload();
 
     } catch (error) {
