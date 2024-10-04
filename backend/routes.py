@@ -93,7 +93,7 @@ def signin():
         
         username = data.get('username')
         password = data.get('password')
-        
+                
         # Basic validation
         if not username or not password:
             return jsonify({'error': 'Missing data'}), 400

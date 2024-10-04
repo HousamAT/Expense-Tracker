@@ -17,6 +17,7 @@ async function signup(data) {
 }
 
 async function signin(data) {
+  console.log('Signing in');
   const response = await fetch(`${API_URL}/signin`, {
     method: 'POST',
     headers: {
