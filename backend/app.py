@@ -101,10 +101,9 @@
 ###########################################################
 
 
-from flask import Flask, jsonify, session, send_from_directory
+from flask import Flask, send_from_directory
 from routes import auth
 from flask_cors import CORS
-import secrets
 import os
 
 app = Flask(__name__, static_folder='../frontend/build')  # Serve the React app from the 'build' folder
@@ -112,8 +111,6 @@ app = Flask(__name__, static_folder='../frontend/build')  # Serve the React app 
 # CORS to allow frontend-backend communication
 CORS(app, supports_credentials=True)
 
-# Secret key for securely signing the session
-app.secret_key = secrets.token_hex(16)
 
 # Register the blueprint
 app.register_blueprint(auth, url_prefix='/auth')  # Flask API routes
