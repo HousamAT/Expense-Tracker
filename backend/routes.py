@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify
-
+import os
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from keys import connection_string
 
-
+# Fetch the MongoDB URI from environment variables
+connection_string = os.getenv("MONGODB_URI")
 
 uri = connection_string
 
