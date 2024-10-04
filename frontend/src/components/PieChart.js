@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto'; // Import the Chart.js
 
+export const API_URL = import.meta.env.MODE === 'development' 
+  ? 'http://127.0.0.1:5000/auth' 
+  : '/auth';
+
 const PieChart = () => {
   const [transactions, setTransactions] = useState([]);
   const username = localStorage.getItem('username');
 
   useEffect(() => {
     // Fetch transactions for the provided username
-    fetch(`http://localhost:5000/auth/transactions?username=${username}`)
+    fetch(`${API_URL}/transactions?username=${username}`)
       .then((response) => response.json())
       .then((data) => setTransactions(data))
       .catch((error) => console.error('Error fetching transactions:', error));

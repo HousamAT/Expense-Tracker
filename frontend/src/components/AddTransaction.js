@@ -1,6 +1,9 @@
-
 import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../context/GlobalState';
+
+export const API_URL = import.meta.env.MODE === 'development' 
+  ? 'http://127.0.0.1:5000/auth' 
+  : '/auth';
 
 export const AddTransaction = () => {
   const [category, setCategory] = useState(null);
@@ -19,7 +22,7 @@ export const AddTransaction = () => {
 
     try {
       const username = localStorage.getItem('username');
-      const response = await fetch(`http://localhost:5000/auth/addtransactions?username=${username}`, {
+      const response = await fetch(`${API_URL}/addtransactions?username=${username}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -141,4 +144,3 @@ export const AddTransaction = () => {
     </>
   );
 };
-

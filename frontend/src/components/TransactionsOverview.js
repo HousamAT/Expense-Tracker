@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import TransactionEditPopup from './TransactionEditPopup'; 
+import TransactionEditPopup from './TransactionEditPopup';
+
+export const API_URL = import.meta.env.MODE === 'development' 
+  ? 'http://127.0.0.1:5000/auth' 
+  : '/auth';
 
 const TransactionsOverview = () => {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null); 
+  const [error, setError] = useState(null);
 
   // Fetch transactions on component mount
   useEffect(() => {
@@ -14,12 +18,12 @@ const TransactionsOverview = () => {
 
       if (!username) {
         console.error('No username found in localStorage');
-        setError('Username not found'); 
+        setError('Username not found');
         return;
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/auth/transactions?username=${username}`, {
+        const response = await fetch(`${API_URL}/transactions?username=${username}`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -32,7 +36,7 @@ const TransactionsOverview = () => {
         setTransactions(data);
       } catch (error) {
         console.error('Error fetching transactions:', error);
-        setError(error.message); 
+        setError(error.message);
       } finally {
         setIsLoading(false);
       }
@@ -51,15 +55,15 @@ const TransactionsOverview = () => {
   };
 
   const calculateExpense = () => {
-    return transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount * -1, 0).toFixed(2); 
-  }; 
+    return transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount * -1, 0).toFixed(2);
+  };
 
   // Update a transaction
   const handleUpdateTransaction = async (updatedTransaction) => {
     const username = localStorage.getItem('username');
 
     try {
-      const response = await fetch(`http://localhost:5000/auth/updatetransaction?username=${username}`, {
+      const response = await fetch(`${API_URL}/updatetransaction?username=${username}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -73,15 +77,14 @@ const TransactionsOverview = () => {
       }
 
       const data = await response.json();
-      setTransactions(prev => prev.map(transaction => 
+      setTransactions(prev => prev.map(transaction =>
         transaction.id === updatedTransaction.id ? updatedTransaction : transaction
       ));
-      console.log(data.message); // Successfully updated message
+      console.log(data.message);
       window.location.reload();
 
     } catch (error) {
       console.error('Error updating transaction:', error.message);
-      // Optionally, display error message to the user
     }
   };
 
@@ -160,7 +163,7 @@ const TransactionList = ({ transactions, onUpdate }) => {
     const username = localStorage.getItem('username');
 
     try {
-      const response = await fetch(`http://localhost:5000/auth/deletetransaction?username=${username}&id=${transactionId}`, {
+      const response = await fetch(`${API_URL}/deletetransaction?username=${username}&id=${transactionId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +176,7 @@ const TransactionList = ({ transactions, onUpdate }) => {
       }
 
       const data = await response.json();
-      window.location.reload(); // Refresh page to update transaction list
+      window.location.reload();
 
     } catch (error) {
       console.error('Error deleting transaction:', error.message);
@@ -185,10 +188,10 @@ const TransactionList = ({ transactions, onUpdate }) => {
       <h3>History</h3>
       <ul className="list">
         {transactions.map(transaction => (
-          <Transaction 
-            key={transaction.id} 
-            transaction={transaction} 
-            onDelete={() => handleDeleteTransaction(transaction.id)} 
+          <Transaction
+            key={transaction.id}
+            transaction={transaction}
+            onDelete={() => handleDeleteTransaction(transaction.id)}
             onUpdate={onUpdate}
           />
         ))}
