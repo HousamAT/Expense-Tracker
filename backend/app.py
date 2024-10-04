@@ -71,41 +71,62 @@
 
 
 
+###############################################
+# from flask import Flask, jsonify, session
+# from routes import auth
+# from flask_cors import CORS
+# import secrets
 
-from flask import Flask, send_from_directory
+
+
+# app = Flask(__name__)
+
+# # CORS(app,origins="*")
+# CORS(app, supports_credentials=True)
+
+
+
+
+# #to use in the session to store user  data securly
+# app.secret_key = secrets.token_hex(16)
+
+# # Register the blueprint
+# app.register_blueprint(auth, url_prefix='/auth')  # url_prefix adds a prefix to all routes in the blueprint
+
+
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
+    
+###########################################################
+
+
+from flask import Flask, jsonify, session, send_from_directory
 from routes import auth
 from flask_cors import CORS
 import secrets
 import os
 
+app = Flask(__name__, static_folder='../frontend/build')  # Serve the React app from the 'build' folder
 
-app = Flask(__name__)
-
-# CORS(app,origins="*")
+# CORS to allow frontend-backend communication
 CORS(app, supports_credentials=True)
 
-
-#to use in the session to store user  data securly
+# Secret key for securely signing the session
 app.secret_key = secrets.token_hex(16)
 
 # Register the blueprint
-app.register_blueprint(auth, url_prefix='/auth')  # url_prefix adds a prefix to all routes in the blueprint
+app.register_blueprint(auth, url_prefix='/auth')  # Flask API routes
 
-#attempting to deploy
-frontend_folder = os.path.join(os.getcwd(), "..","frontend","build")
-print(f"Serving frontend from: {frontend_folder}")
+# Serve React app's static files
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_react_app(path):
+    if path != '' and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)  # Serve the file if it exists
+    else:
+        return send_from_directory(app.static_folder, 'index.html')  # Fallback to React's index.html
 
-
-
-#serve static files from the "build" folder under the "frontend" directory
-@app.route("/", defaults={"filename": ""})
-@app.route("/<path:filename>")
-def index(filename):
-    if not filename:
-        filename = "index.html"
-    return send_from_directory(frontend_folder, filename)
-
-import routes
 
 if __name__ == '__main__':
     app.run(debug=True)
