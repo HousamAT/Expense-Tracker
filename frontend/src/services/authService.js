@@ -1,6 +1,8 @@
 // src/services/authService.js
 
-export const API_URL = import.meta.env.MODE === 'development' ? 'http://127.0.0.1:5000/auth' : '/auth';
+// export const API_URL = import.meta.env.MODE === 'development' ? 'http://127.0.0.1:5000/auth' : '/auth';
+export const API_URL = '/auth';
+
 
 async function signup(data) {
   const response = await fetch(`${API_URL}/signup`, {

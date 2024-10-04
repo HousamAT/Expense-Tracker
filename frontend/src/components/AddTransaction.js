@@ -1,9 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../context/GlobalState';
 
-export const API_URL = import.meta.env.MODE === 'development' 
-  ? 'http://127.0.0.1:5000/auth' 
-  : '/auth';
+// export const API_URL = import.meta.env.MODE === 'development' 
+//   ? 'http://127.0.0.1:5000/auth' 
+//   : '/auth';
+
+export const API_URL = '/auth';
 
 export const AddTransaction = () => {
   const [category, setCategory] = useState(null);

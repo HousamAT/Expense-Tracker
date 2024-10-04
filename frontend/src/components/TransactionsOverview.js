@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import TransactionEditPopup from './TransactionEditPopup';
 
-export const API_URL = import.meta.env.MODE === 'development' 
-  ? 'http://127.0.0.1:5000/auth' 
-  : '/auth';
+// export const API_URL = import.meta.env.MODE === 'development' 
+//   ? 'http://127.0.0.1:5000/auth' 
+//   : '/auth';
+
+export const API_URL = '/auth';
 
 const TransactionsOverview = () => {
   const [transactions, setTransactions] = useState([]);
