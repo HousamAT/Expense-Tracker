@@ -56,9 +56,9 @@ pip install -r requirements.txt
 python app.py
 
 ### Navigate to the frontend directory:
-cd ../frontend
-npm install
-npm start
+- cd ../frontend
+- npm install
+- npm start
 
 
 
