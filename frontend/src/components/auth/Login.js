@@ -29,7 +29,7 @@ function Login() {
       navigate('/dashboard')
 
     } catch (error) {
-      alert('Login failed');
+      alert(error.message);
     }
   };
   

@@ -26,7 +26,7 @@ function SignUp() {
       alert('Sign up successful!');
       navigate('/dashboard')
     } catch (error) {
-      alert('Sign up failed');
+      alert(error.message);
     }
   };
 
