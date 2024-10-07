@@ -11,7 +11,8 @@ async function signup(data) {
     body: JSON.stringify(data),
   });
   if (!response.ok) {
-    throw new Error('Failed to sign up');
+    const errorData = await response.json(); // Capture the error message
+    throw new Error(errorData.error || 'Failed to sign up'); // Pass the error message from the backend
   }
   return response.json();
 }
@@ -27,7 +28,9 @@ async function signin(data) {
   });
   
   if (!response.ok) {
-    throw new Error('Failed to sign in');
+    //throw new Error('Failed to sign in');
+    const errorData = await response.json(); // Capture the error message
+    throw new Error(errorData.error || 'Failed to sign up'); // Pass the error message from the backend
   }
 
   return response.json();

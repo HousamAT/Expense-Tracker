@@ -22,14 +22,14 @@ function Login() {
     try {
       
       const response = await authService.signin(formData);  
-      localStorage.removeItem('username'); // Clears old  'username' key from localStorage
-      localStorage.setItem('username', response.username); // Store new username in local Storage
+      localStorage.removeItem('username'); 
+      localStorage.setItem('username', response.username); 
       
       alert('Login successful!');
       navigate('/dashboard')
 
     } catch (error) {
-      alert('Login failed');
+      alert(error.message);
     }
   };
   

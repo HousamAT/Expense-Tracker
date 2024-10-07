@@ -44,7 +44,6 @@ def signup():
             user_data = {
                 "username": username,
                 "password": password,
-                "transactions": []  # Initialize an empty array for transactions
             }
             collection.insert_one(user_data)
 
