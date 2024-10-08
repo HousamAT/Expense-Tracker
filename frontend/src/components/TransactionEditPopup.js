@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
-import './TransactionEditPopup.css';
+import React, { useState } from 'react'; // Import React and useState hook
+import './TransactionEditPopup.css'; 
 
 const TransactionEditPopup = ({ transaction, onClose, onUpdate }) => {
+  // State to manage the amount and text from the transaction
   const [amount, setAmount] = useState(transaction.amount);
   const [text, setText] = useState(transaction.text);
 
+  // Handle form submission
   const handleSubmit = (e) => {
-    e.preventDefault();
-    
+    e.preventDefault(); // Prevent default form submission
 
+    // Create an updated transaction object
     const updatedTransaction = {
       id: transaction.id,
-      amount: parseFloat(amount),
+      amount: parseFloat(amount), // Parse the amount as a float
       text,
     };
 
+    // Call the onUpdate function to update the transaction
     onUpdate(updatedTransaction);
-    onClose(); 
+    onClose(); // Close the popup after updating
   };
 
+  // Define available categories for the transaction
   const categories = [
     { value: 'Groceries', label: 'Groceries', icon: <i className="fas fa-shopping-basket"></i> },
     { value: 'Takeaway', label: 'Takeaway', icon: <i className="fas fa-utensils"></i> },
@@ -35,25 +39,24 @@ const TransactionEditPopup = ({ transaction, onClose, onUpdate }) => {
     { value: 'Savings', label: 'Savings', icon: <i className="fas fa-piggy-bank"></i> },
     { value: 'Business', label: 'Business', icon: <i className="fas fa-briefcase"></i> },
   ];
-  
 
   return (
-    <div className="popup">
-      <div className="popup-content">
+    <div className="popup"> {/* Main container for the popup */}
+      <div className="popup-content"> {/* Container for popup content */}
         <h2>Edit Transaction</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}> {/* Form for editing transaction */}
           <label>
-            Amount:
+            Amount: 
             <input
               type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
+              value={amount} // Bind amount state to input value
+              onChange={(e) => setAmount(e.target.value)} // Update state on change
+              required // Make the field required
             />
           </label>
           <label>
-            Category:
-            <select value={text} onChange={(e) => setText(e.target.value)} required>
+            Category: {/* Label for category selection */}
+            <select value={text} onChange={(e) => setText(e.target.value)} required> {/* Bind text state to select value */}
               {/* Map over categories to create options */}
               {categories.map(category => (
                 <option key={category.value} value={category.value}>
@@ -62,12 +65,12 @@ const TransactionEditPopup = ({ transaction, onClose, onUpdate }) => {
               ))}
             </select>
           </label>
-          <button type="submit">Update</button>
-          <button type="button" onClick={onClose}>Cancel</button>
+          <button type="submit">Update</button> {/* Submit button for the form */}
+          <button type="button" onClick={onClose}>Cancel</button> {/* Cancel button to close popup */}
         </form>
       </div>
     </div>
   );
 };
 
-export default TransactionEditPopup;
+export default TransactionEditPopup; // Export the component for use in other files

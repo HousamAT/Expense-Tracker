@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignUp from './components/auth/SignUp';
 import Login from './components/auth/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 
-//this is how you use the icons
-//import { dashboard, transactions, dollar } from './utils/Icons.js'; // Import specific icons
-//import '@fortawesome/fontawesome-free/css/all.min.css'; // Importing Font Awesome
-
-
+// Main application component
 function App() {
+  return (
+    // Router component to enable routing in the application
+    <Router>
+      <Routes>
+        {/* Route for the Sign Up page */}
+        <Route path="/signup" element={<SignUp />} />
+        
+        {/* Route for the Login page (default route) */}
+        <Route path="/" element={<Login />} />
+        
+        {/* Route for the Dashboard page */}
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
+}
 
-      return (
-        <Router>
-          <Routes>
-
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/" element={< Login/>} />
-            <Route path = "/dashboard" element = {<Dashboard/>}/>
-
-          </Routes>
-        </Router>
-    );
-  }
-
-export default App
+export default App;

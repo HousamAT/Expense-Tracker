@@ -1,42 +1,46 @@
-
 import React, { useState, useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
+import { GlobalContext } from '../context/GlobalState'; // Import GlobalContext for state management
 
+// Define the AddTransaction component
 export const AddTransaction = () => {
-  const [category, setCategory] = useState(null);
-  const [amount, setAmount] = useState(0);
+  // State variables to manage form inputs and transaction type
+  const [category, setCategory] = useState(null); // Selected category
+  const [amount, setAmount] = useState(0); // Amount for the transaction
   const [transactionType, setTransactionType] = useState('expense'); // State to determine if it's an expense or income
-  const { addTransaction } = useContext(GlobalContext);
+  const { addTransaction } = useContext(GlobalContext); // Access addTransaction function from context
 
+  // Handle form submission
   const onSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission behavior
 
+    // Create a new transaction object
     const newTransaction = {
-      id: Math.floor(Math.random() * 100000000),
-      text: category ? category.label : '',
-      amount: transactionType === 'expense' ? -Math.abs(amount) : Math.abs(amount), // Set amount based on transactionType
+      id: Math.floor(Math.random() * 100000000), // Generate a random ID for the transaction
+      text: category ? category.label : '', // Set text to category label if selected
+      amount: transactionType === 'expense' ? -Math.abs(amount) : Math.abs(amount), // Set amount based on transaction type
     };
 
     try {
-      const username = localStorage.getItem('username');
+      const username = localStorage.getItem('username'); // Retrieve username from localStorage
+      // Send a POST request to add the new transaction
       const response = await fetch(`http://localhost:5000/auth/addtransactions?username=${username}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json', // Specify the content type
         },
-        body: JSON.stringify(newTransaction),
+        body: JSON.stringify(newTransaction), // Convert newTransaction to JSON
       });
 
-      const data = await response.json();
+      const data = await response.json(); // Parse response data
 
       if (response.ok) {
-        addTransaction(data);
-        window.location.reload();
+        addTransaction(data); // Add transaction to global state
+        window.location.reload(); // Reload the page to see updates
       } else {
-        console.error('Failed to add transaction:', data.error);
+        console.error('Failed to add transaction:', data.error); // Log error if transaction fails
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:', error); // Log any other errors
     }
   };
 
@@ -58,30 +62,32 @@ export const AddTransaction = () => {
     { value: 'Business', label: 'Business', icon: <i className="fas fa-briefcase"></i> },
   ];
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State to manage dropdown visibility
 
+  // Handle category selection from the dropdown
   const handleSelect = (selectedCategory) => {
-    setCategory(selectedCategory);
-    setDropdownOpen(false);
+    setCategory(selectedCategory); // Update selected category
+    setDropdownOpen(false); // Close the dropdown
   };
 
   return (
     <>
       <h3>Add new transaction</h3>
       <form onSubmit={onSubmit}>
+        {/* Category selection */}
         <div className="form-control">
           <label htmlFor="category">Category</label>
           <div className="custom-dropdown">
             <div
               className="dropdown-header"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+              onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle dropdown visibility
             >
               {category ? (
                 <>
-                  {category.icon} {category.label}
+                  {category.icon} {category.label} {/* Display selected category */}
                 </>
               ) : (
-                'Select Category'
+                'Select Category' // Placeholder if no category is selected
               )}
             </div>
             {dropdownOpen && (
@@ -90,9 +96,9 @@ export const AddTransaction = () => {
                   <div
                     key={cat.value}
                     className="dropdown-item"
-                    onClick={() => handleSelect(cat)}
+                    onClick={() => handleSelect(cat)} // Handle category selection
                   >
-                    {cat.icon} {cat.label}
+                    {cat.icon} {cat.label} {/* Display category with icon */}
                   </div>
                 ))}
               </div>
@@ -100,20 +106,21 @@ export const AddTransaction = () => {
           </div>
         </div>
 
+        {/* Amount input */}
         <div className="form-control">
           <label htmlFor="amount">
             <strong>Amount</strong> <br />
-            
-            <span>Add a Transaction Amount </span> Below
+            <span>Add a Transaction Amount Below</span>
           </label>
           <input
             type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            value={amount} // Bind input value to amount state
+            onChange={(e) => setAmount(e.target.value)} // Update amount state on input change
             placeholder="Enter amount..."
           />
         </div>
 
+        {/* Transaction type selection */}
         <div className="form-control">
           <label>Transaction Type:</label><br />
           <input
@@ -121,8 +128,8 @@ export const AddTransaction = () => {
             id="expense"
             name="transactionType"
             value="expense"
-            checked={transactionType === 'expense'}
-            onChange={() => setTransactionType('expense')}
+            checked={transactionType === 'expense'} // Check if expense is selected
+            onChange={() => setTransactionType('expense')} // Update transaction type
           />
           <label htmlFor="expense">Expense</label><br />
           <input
@@ -130,15 +137,14 @@ export const AddTransaction = () => {
             id="income"
             name="transactionType"
             value="income"
-            checked={transactionType === 'income'}
-            onChange={() => setTransactionType('income')}
+            checked={transactionType === 'income'} // Check if income is selected
+            onChange={() => setTransactionType('income')} // Update transaction type
           />
           <label htmlFor="income">Income</label>
         </div>
 
-        <button className="btn">Add transaction</button>
+        <button className="btn">Add transaction</button> {/* Submit button */}
       </form>
     </>
   );
 };
-
